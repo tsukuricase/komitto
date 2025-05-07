@@ -3,6 +3,8 @@ use std::env;
 use reqwest::blocking::Client;
 use serde_json::json;
 use clap::Parser;
+use indicatif::{ProgressBar, ProgressStyle};
+use std::time::Duration;
 
 #[derive(Parser)]
 struct Cli {
@@ -32,6 +34,14 @@ fn main() {
     let api_key = env::var("OPENROUTER_API_KEY")
         .expect("请在环境变量设置 OPENROUTER_API_KEY");
 
+    // 新增 loading spinner
+    let spinner = ProgressBar::new_spinner();
+    spinner.set_style(ProgressStyle::default_spinner()
+        .template("{spinner:.cyan} {msg}")
+        .unwrap());
+    spinner.set_message("Waiting for OpenRouter AI response...");
+    spinner.enable_steady_tick(Duration::from_millis(120));
+
     let client = Client::new();
     let body = json!({
         "model": args.model,
@@ -40,11 +50,15 @@ fn main() {
         ]
     });
 
+    // AI 请求
     let res = client.post("https://openrouter.ai/api/v1/chat/completions")
         .bearer_auth(api_key)
         .json(&body)
         .send()
         .expect("请求 openrouter 失败");
+
+    // 关闭 spinner
+    spinner.finish_and_clear();
 
     let resp_json: serde_json::Value = res.json().expect("解析 json 失败");
 
