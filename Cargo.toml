@@ -1,6 +1,6 @@
 [package]
 name = "komitto"
-version = "0.0.1"
+version = "0.1.0"
 edition = "2021"
 authors = ["jalever <jalever@gmail.com>"]
 description = "使用大模型（OpenRouter，兼容 OpenAI）自动生成专业、规范的 Git Commit Message"
