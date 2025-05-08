@@ -2,6 +2,14 @@
 name = "komitto"
 version = "0.0.1"
 edition = "2021"
+authors = ["jalever <jalever@gmail.com>"]
+description = "使用大模型（OpenRouter，兼容 OpenAI）自动生成专业、规范的 Git Commit Message"
+repository = "https://github.com/tsukuricase/komitto"
+homepage = "https://github.com/tsukuricase/komitto"
+license = "MIT" 
+readme = "README.md"
+categories = ["command-line-utilities", "git", "development-tools"]
+keywords = ["git", "commit", "ai", "openai", "cli"]
 
 [dependencies]
 reqwest = { version = "0.11", features = ["blocking", "json"] }

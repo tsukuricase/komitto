@@ -10,7 +10,6 @@ use std::time::Duration;
 struct Cli {
     #[arg(long, default_value = "openai/gpt-4.1")]
     model: String,
-    /// Compare staged changes instead of working directory changes
     #[arg(long)]
     staged: bool,
 }
