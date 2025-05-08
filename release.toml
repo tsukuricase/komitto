@@ -1,0 +1,5 @@
+consolidate-commits = true
+push = true
+publish = true
+allow-branch = ["master", "main"]
+tag-prefix = "v"
