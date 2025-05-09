@@ -17,14 +17,12 @@ struct Cli {
 fn main() {
     let args = Cli::parse();
 
-    // 根据参数决定 git diff 类型
     let (diff_args, info_msg) = if args.staged {
         (vec!["diff", "--staged"], "没有暂存的修改（未执行 git add）。")
     } else {
         (vec!["diff"], "没有工作区的修改。")
     };
 
-    // 获取 diff
     let diff = Command::new("git")
         .args(&diff_args)
         .output()
@@ -44,7 +42,6 @@ fn main() {
     let api_key = env::var("OPENROUTER_API_KEY")
         .expect("请在环境变量设置 OPENROUTER_API_KEY");
 
-    // Spinner
     let spinner = ProgressBar::new_spinner();
     spinner.set_style(ProgressStyle::default_spinner()
         .template("{spinner:.cyan} {msg}")
@@ -60,7 +57,6 @@ fn main() {
         ]
     });
 
-    // AI 请求
     let res = client.post("https://openrouter.ai/api/v1/chat/completions")
         .bearer_auth(api_key)
         .json(&body)
