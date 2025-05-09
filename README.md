@@ -1,127 +1,144 @@
 # komitto
 
-> 使用大模型（OpenRouter，兼容 OpenAI）自动生成专业、规范的 Git Commit Message，提高团队协作效率！
+> 🚀 **AI-powered Conventional Commit Message Generator for Git.**  
+> Automatically generate professional, well-structured Git commit messages using large language models (LLMs) via OpenRouter.
 
 ---
 
-## ✨ 项目简介
+## ✨ Features
 
-**komitto** 是一个 Rust 编写的命令行工具，可自动获取 Git 暂存区变更，联动大语言模型（如 ChatGPT，通过 OpenRouter)，一键帮你生成符合 [Conventional Commits](https://www.conventionalcommits.org/zh-hans/v1.0.0/) 规范的 commit message，助力代码审查与版本管理更高效、专业。
-
----
-
-## 🚀 主要特性
-
-- ✨ 自动提取 `git diff --staged`，智能生成提交说明（支持中文/英文）
-- 🤖 支持指定多种模型（如 gpt-4, gpt-3.5, Llama 等，只要 OpenRouter 支持）
-- 🔒 API 密钥通过环境变量安全管理
-- 🛠️ 一行命令轻松集成你的开发流程
-- 📜 输出规范的 `git commit -m "..."`
-- ⚡ 跨平台，编译产物小巧，命令行体验极佳
+- **One-command automation:** Summarizes your `git diff --staged` and generates a commit message with a single command.
+- **Conventional Commits:** Output messages conform to [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) style (e.g., feat, fix, chore).
+- **Supports OpenRouter (OpenAI-compatible):** Only OpenRouter API Key is supported currently.
+- **Multilingual:** Outputs commit messages in both English and Chinese (auto-detect by LLM).
+- **Model Flexibility:** Choose any OpenRouter-supported model (e.g., `gpt-4`, `gpt-3.5`, Llama, etc).
+- **Cross-platform:** Lightning-fast Rust CLI utility (macOS, Linux, Windows supported).
+- **Security:** API keys are handled via environment variables.
 
 ---
 
-## 🛠️ 安装指南
+## 📦 Installation
 
-### 1. 准备环境
+### 1. Prerequisites
 
-- 已安装 [Rust 开发工具链](https://www.rust-lang.org/zh-CN/tools/install)
-- 已注册 [OpenRouter](https://openrouter.ai/) 并获取 API Key
+- [Rust toolchain](https://www.rust-lang.org/tools/install) installed
+- [OpenRouter](https://openrouter.ai/) account and API Key
 
-### 2. 克隆项目 & 编译
+### 2. Build from source
 
 ```bash
-git clone https://github.com/你的用户名/komitto.git
+git clone https://github.com/tsukuricase/komitto.git
 cd komitto
-
-# 构建 release 版（建议）
 cargo build --release
-
-# 若需测试直接运行
-cargo run
 ```
-编译后可执行文件路径为: `target/release/komitto`
 
-### 3. 配置 OpenRouter API Key
+After build, the binary is at: `target/release/komitto`
 
-将 API 密钥写入终端环境（建议加入 .zshrc 或 .bashrc 等文件）：
+### 3. Set up your OpenRouter API Key
+
+Add your API Key to your environment, e.g.:
+
+**Linux/Mac:**
 
 ```bash
-export OPENROUTER_API_KEY=你的apikey
+export OPENROUTER_API_KEY=your-openrouter-api-key
+```
+
+*(Recommended: add to your `~/.bashrc` or `~/.zshrc` for convenience)*
+
+**Windows CMD:**
+
+```cmd
+set OPENROUTER_API_KEY=your-openrouter-api-key
 ```
 
 ---
 
-## 🚦 使用方法
+## 🚦 Usage
 
-1. **小步提交，先添加变更：**
-   ```bash
-   git add .
-   ```
-2. **运行 komitto 自动生成提交消息：**
-   - 调试时用 cargo 执行：
-     ```bash
-     cargo run
-     ```
-   - 或者直接用 release 可执行文件（推荐）：
-     ```bash
-     ./target/release/komitto
-     ```
-3. **查看推荐的 commit message，按需提交：**
-   ```bash
-   git commit -m "fix(api): 修复登录异常导致的会话丢失"
-   ```
+### 1. Stage your changes
 
----
+```bash
+git add .
+```
 
-## ⚙️ 可选参数
+### 2. Generate commit message
 
-| 参数           | 说明                                 | 示例                    |
-|----------------|-------------------------------------|------------------------|
-| `--model`      | 指定大模型（如 `gpt-4`, `gpt-3.5`） | `--model gpt-4`        |
-| `--lang`       | 输出语言（如 `zh` 中文或 `en` 英文） | `--lang zh`            |
-| `--yes`        | 自动用建议直接提交（谨慎使用）       | `--yes`                |
-| `--help`       | 查看命令帮助信息                     | `--help`               |
+```bash
+target/release/komitto
+```
 
-> **提示** 具体参数以你的实现为准，支持 `komitto --help` 查看即时文档。
+> The tool will automatically extract your staged changes, send to OpenRouter, and propose a commit message.
+
+### 3. Use the suggested commit message
+
+```bash
+git commit -m "your AI-generated commit message"
+```
 
 ---
 
-## ⛔ 常见问题
+### ⚙️ CLI options
 
-- **没有检测到暂存区 diff？**  
-  请先 `git add` 需要提交的文件。
-- **API Key Invalid？**  
-  检查环境变量设置和 Key 是否过期。
-- **响应过慢？**  
-  网络质量或服务商限流问题，稍后重试。
+| Argument       | Description                                                  | Example                |
+|----------------|--------------------------------------------------------------|------------------------|
+| `--model`      | Specify OpenRouter model (default: `openai/gpt-4.1`)         | `--model gpt-3.5`      |
+| `--staged`     | Use staged changes only (`git diff --staged`, default: false)| `--staged`             |
+| `--help`       | Show help message                                            | `--help`               |
 
----
+Try:
 
-## 📦 依赖&兼容性
-
-- Rust 2021+
-- 依赖 crates: `clap`、`reqwest`、`serde_json` 等
-- 兼容任意支持 OpenRouter 的 LLM 模型
+```bash
+komitto --help
+```
 
 ---
 
-## 🤝 贡献指南
+## 🌐 Internationalization
 
-欢迎社区开发者一起共建！
-
-1. fork 并新建分支
-2. 开发并自测（建议加单测）
-3. 提交 PR 说明修改点
+- The prompt is optimized for English Conventional Commits, but models may return content in English or Chinese based on your code/comments/context.
+- Contributors interested in further i18n support may open an Issue or PR!
 
 ---
 
-## 📄 协议
+## 🔐 OpenRouter Only
 
-MIT license ©️ 2024 
+> ⚠️ **Notice:**  
+> Currently, komitto **only supports [OpenRouter](https://openrouter.ai/) API Key** (`OPENROUTER_API_KEY` environment variable).  
+> OpenAI direct keys are not yet supported.
+
+For OpenRouter API docs and supported models, see: [OpenRouter Developers](https://openrouter.ai/docs)
 
 ---
 
-## 🙌 鸣谢
+## 🧪 Testing
 
-特别感谢 [OpenRouter](https://openrouter.ai/)、[Rust 社区](https://rust-lang.org/) 与所有贡献者！
+- Run tests locally before publishing:
+  ```bash
+  cargo test
+  ```
+- Our GitHub Actions CI will also automatically build & test for every push before publishing to crates.io.
+
+---
+
+## 🤝 Contributing
+
+1. Fork this repo, create your feature branch (`git checkout -b feat/my-feature`)
+2. Write code & tests (`cargo test`)
+3. Make sure all checks pass and open a Pull Request
+
+Questions? Suggestions? [Open an issue!](https://github.com/tsukuricase/komitto/issues)
+
+---
+
+## 📄 License
+
+MIT License © 2024 tsukuricase & contributors
+
+---
+
+## 🙏 Acknowledgements
+
+- Powered by [OpenRouter](https://openrouter.ai/)
+- Built with [Rust](https://www.rust-lang.org/)
+- Inspired by [Conventional Commits](https://www.conventionalcommits.org/)
