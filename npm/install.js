@@ -5,7 +5,7 @@ const os = require('os');
 const { join } = require('path');
 
 const PACKAGE_NAME = 'komitto';
-const VERSION = '0.1.5';
+const VERSION = '0.1.6';
 
 function getPlatform() {
   const type = os.type();

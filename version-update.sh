@@ -1,6 +1,6 @@
 #!/bin/bash
 # 更新版本号的脚本
-NEW_VERSION="0.1.5"
+NEW_VERSION="0.1.6"
 
 # 更新 Cargo.toml
 sed -i '' "s/^version = \".*\"/version = \"$NEW_VERSION\"/" Cargo.toml
