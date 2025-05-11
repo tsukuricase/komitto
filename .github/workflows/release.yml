@@ -1,0 +1,84 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            artifact_name: komitto-${{ github.ref_name }}-linux.tar.gz
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            artifact_name: komitto-${{ github.ref_name }}-linuxarm64.tar.gz
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            artifact_name: komitto-${{ github.ref_name }}-macos.tar.gz
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            artifact_name: komitto-${{ github.ref_name }}-macosarm64.tar.gz
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            artifact_name: komitto-${{ github.ref_name }}-win64.tar.gz
+          - os: windows-latest
+            target: i686-pc-windows-msvc
+            artifact_name: komitto-${{ github.ref_name }}-win32.tar.gz
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+          override: true
+      
+      - name: Build Binary
+        run: cargo build --release --target ${{ matrix.target }}
+      
+      - name: Create Package Directory
+        run: mkdir -p package
+      
+      - name: Copy Binary (Unix)
+        if: runner.os != 'Windows'
+        run: cp target/${{ matrix.target }}/release/komitto package/
+      
+      - name: Copy Binary (Windows)
+        if: runner.os == 'Windows'
+        run: copy target\${{ matrix.target }}\release\komitto.exe package\
+      
+      - name: Create tarball (Unix)
+        if: runner.os != 'Windows'
+        run: tar -C package -czf ${{ matrix.artifact_name }} komitto
+      
+      - name: Create tarball (Windows)
+        if: runner.os == 'Windows'
+        run: tar -C package -czf ${{ matrix.artifact_name }} komitto.exe
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_name }}
+    
+  create-release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "*/komitto-v*.*"
+          draft: false
+          prerelease: false

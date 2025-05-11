@@ -17,9 +17,19 @@
 
 ---
 
-## 📦 Installation
+## �� Installation
 
-### 1. Prerequisites
+### 通过 npm 安装 (推荐)
+
+如果您已经安装了 Node.js，可以通过 npm 轻松安装:
+
+```bash
+npm install -g komitto
+```
+
+### 通过源码安装
+
+1. Prerequisites
 
 - [Rust toolchain](https://www.rust-lang.org/tools/install) installed
 - [OpenRouter](https://openrouter.ai/) account and API Key

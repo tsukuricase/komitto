@@ -1,0 +1,40 @@
+{
+  "name": "komitto",
+  "version": "0.1.5",
+  "description": "AI-powered Conventional Commit Message Generator for Git",
+  "main": "index.js",
+  "bin": {
+    "komitto": "bin/komitto.js"
+  },
+  "scripts": {
+    "postinstall": "node install.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tsukuricase/komitto.git"
+  },
+  "keywords": [
+    "git",
+    "commit",
+    "ai",
+    "openai",
+    "cli"
+  ],
+  "author": "jalever <jalever@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tsukuricase/komitto/issues"
+  },
+  "homepage": "https://github.com/tsukuricase/komitto#readme",
+  "dependencies": {
+    "binary-install": "^1.0.1"
+  },
+  "files": [
+    "install.js",
+    "bin",
+    "index.js"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  }
+} 
