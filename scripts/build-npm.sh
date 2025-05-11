@@ -11,7 +11,6 @@ PROJECT_ROOT=$(pwd)
 # 创建发布目录
 mkdir -p "$PROJECT_ROOT/releases"
 
-# 根据当前系统确定目标平台
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   PLATFORM="x86_64-unknown-linux-gnu"
   TARGET="linux"
